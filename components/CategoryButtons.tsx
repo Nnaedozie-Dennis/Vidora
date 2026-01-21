@@ -17,13 +17,13 @@ export default function CategoryButtons() {
   };
 
   return (
-    <section className="py-4 px-4 overflow-x-auto scrollbar-hide sticky top-16 z-40 bg-slate-950">
+    <section className="py-3 sm:py-4 px-2 sm:px-3 overflow-x-auto scrollbar-hide sticky top-16 z-40 bg-slate-950">
       <div className="flex space-x-2">
         {Object.keys(GENRE_MAP).map((genre) => (
           <button
             key={genre}
             onClick={() => handleClick(genre)}
-            className={`px-4 py-2 rounded-full whitespace-nowrap cursor-pointer ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap cursor-pointer text-xs sm:text-sm font-medium ${
               currentGenre === genre
                 ? "bg-red-600 text-white"
                 : "bg-slate-900 text-gray-200 hover:bg-slate-800 "

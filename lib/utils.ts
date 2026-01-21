@@ -12,6 +12,7 @@ export interface Movie {
   vote_average: number;
   overview: string;
   genres: { id: number; name: string }[];
+  runtime?: number;
   credits?: { cast: { name: string }[] };
   videos?: { results: { key: string; site: string; type: string }[] };
   similar?: { results: Movie[] };
@@ -73,7 +74,6 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-// lib/utils.ts - Add this new function
 
 export async function fetchModernRecommendations(
   movie: Movie,

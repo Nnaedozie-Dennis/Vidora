@@ -82,8 +82,8 @@ export default function MovieGrid() {
   };
 
   return (
-    <section className="py-8">
-      <h2 className="text-2xl font-bold  px-4">
+    <section className="py-6 sm:py-8 px-4 sm:px-6">
+      <h2 className="text-xl sm:text-2xl font-bold mb-3">
         {searchQuery
           ? "Search Results"
           : genre === "All Popular"
@@ -91,12 +91,12 @@ export default function MovieGrid() {
             : `${genre} Movies`}
       </h2>
 
-      {error && <p className="text-red-500 text-center mb-6">{error}</p>}
+      {error && <p className="text-red-500 text-center mb-6 text-sm sm:text-base">{error}</p>}
 
       {/* <CategoryButtons /> */}
       {!searchQuery && <CategoryButtons />}
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-3 sm:gap-4 lg:gap-5">
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
@@ -104,7 +104,7 @@ export default function MovieGrid() {
 
       {/* Loading skeletons during fetch */}
       {loading && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 px-4 mt-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-3 sm:gap-4 lg:gap-5 mt-8">
           {Array.from({ length: 10 }).map((_, i) => (
             <SkeletonLoader key={i} />
           ))}
@@ -113,27 +113,27 @@ export default function MovieGrid() {
 
       {/* Load More Button */}
       {!loading && hasMore && movies.length > 0 && (
-        <div className="text-center mt-12 mb-8">
+        <div className="text-center mt-8 sm:mt-12 mb-6 sm:mb-8">
           <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-sm sm:text-lg transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer w-full sm:w-auto"
           >
-            {loading ? "Loading..." : "Load More Movies"}
+            {loading ? "Loading..." : "Show More Movies"}
           </button>
         </div>
       )}
 
       {/* No more results */}
       {!hasMore && movies.length > 0 && !loading && (
-        <p className="text-center text-gray-400 py-12">
+        <p className="text-center text-gray-400 py-8 sm:py-12 text-sm sm:text-base">
           You've reached the end — no more movies to load.
         </p>
       )}
 
       {/* No results at all */}
       {!loading && movies.length === 0 && !error && (
-        <p className="text-center text-gray-400 py-20 text-xl">
+        <p className="text-center text-gray-400 py-12 sm:py-20 text-base sm:text-xl">
           No movies found for this category/search.
         </p>
       )}

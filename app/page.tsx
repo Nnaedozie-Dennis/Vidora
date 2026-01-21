@@ -1,21 +1,34 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
-import Hero from '../components/Hero';
-import TrendingCarousel from '../components/TrendingCarousel';
-// import CategoryButtons from '../components/CategoryButtons';
-import MovieGrid from '../components/MovieGrid';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Hero from "../components/Hero";
+import TrendingCarousel from "../components/TrendingCarousel";
+import MovieGrid from "../components/MovieGrid";
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
-  const hasSearch = searchParams.has('search') && searchParams.get('search')?.trim() !== '';
+  const hasSearch =
+    searchParams.has("search") && searchParams.get("search")?.trim() !== "";
+
+  const handleSearch = (query: string) => {
+    // Handle search if needed
+  };
 
   return (
     <main className="min-h-screen bg-slate-950">
-      {!hasSearch && <Hero />} {/* Hide Hero when searching */}
+      {!hasSearch && <Hero onSearch={handleSearch} />}{" "}
+      {/* Hide Hero when searching */}
       {!hasSearch && <TrendingCarousel />} {/* Hide Trending when searching */}
-      {/* {!hasSearch && <CategoryButtons />}  */}
       <MovieGrid />
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+      <HomeContent />
+    </Suspense>
   );
 }

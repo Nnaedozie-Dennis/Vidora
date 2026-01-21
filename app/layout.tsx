@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Suspense } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vidora",
@@ -18,9 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-900 text-gray-200`}>
-        <Header />
-        {children}
+      <body className="bg-slate-950 text-gray-200 overflow-x-hidden font-sans">
+        <Suspense fallback={null}>
+          <Header />
+        </Suspense>
+        <main className="w-full">{children}</main>
         <Footer />
       </body>
     </html>

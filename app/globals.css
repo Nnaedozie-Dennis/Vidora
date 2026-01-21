@@ -14,10 +14,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-  --bg-primary: #0F172A;
-  --text-primary: #E5E7EB;
-  --accent-red: #DC2626;
-  --accent-yellow: #CA8A04;
+    --bg-primary: #0f172a;
+    --text-primary: #e5e7eb;
+    --accent-red: #dc2626;
+    --accent-yellow: #ca8a04;
   }
 }
 
@@ -29,4 +29,19 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 2s ease-in forwards;
 }

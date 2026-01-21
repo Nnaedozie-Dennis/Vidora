@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { debounce } from "../lib/utils";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Search, Bell, User } from "lucide-react";
+import { Search, Bell, User, Menu, X } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,6 +18,7 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -80,80 +81,145 @@ export default function Header() {
     };
   }, [isSearchOpen]);
 
+  // Close mobile menu when search opens
+  useEffect(() => {
+    if (isSearchOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isSearchOpen]);
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 py-4 px-6 flex items-center justify-between transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ${
         isScrolled
           ? "bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-slate-700"
           : "bg-transparent"
       }`}
     >
       {/* Left side: Logo + Nav */}
-      <div className="flex items-center space-x-8 ">
-        <Link href="/" className="text-3xl font-bold text-red-600 mr-12">
+      <div className="flex items-center space-x-4 sm:space-x-8 ">
+        <Link href="/" className="text-2xl sm:text-3xl font-bold text-red-600">
           Vidora
         </Link>
 
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden lg:flex space-x-4 xl:space-x-6 text-sm md:text-base">
           <Link href="/" className="hover:text-red-400 transition-colors">
             Home
           </Link>
-          <Link href="/movies" className="hover:text-red-400 transition-colors">
+          <Link href="/" className="hover:text-red-400 transition-colors">
             Movies
           </Link>
-          <Link href="/series" className="hover:text-red-400 transition-colors">
+          <Link href="/" className="hover:text-red-400 transition-colors">
             Series
           </Link>
-          <Link href="/kids" className="hover:text-red-400 transition-colors">
+          <Link href="/" className="hover:text-red-400 transition-colors">
             Kids
           </Link>
         </nav>
       </div>
 
       {/* Right side: Icons + Search */}
-      <div className="flex items-center space-x-5">
-        {/* Search area */}
-        <div ref={searchRef} className="relative flex items-center">
-          {!isSearchOpen ? (
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white"
-              aria-label="Open search"
-            >
-              <Search size={22} />
-            </button>
-          ) : (
-            <div className="flex items-center bg-slate-800 border border-slate-600 rounded-full px-4 py-2 w-80 shadow-lg">
-              <Search size={18} className="text-gray-400 mr-3" />
-              <input
-                type="text"
-                placeholder="Search movies, series..."
-                value={searchTerm}
-                onChange={onInputChange}
-                className="flex-1 bg-transparent text-white placeholder-gray-500 outline-none text-base"
-                autoFocus
-              />
-            </div>
-          )}
-        </div>
+      <div className="flex items-center space-x-2 sm:space-x-5">
+        {/* Search area - hidden on mobile when menu is open */}
+        {!isMobileMenuOpen && (
+          <div ref={searchRef} className="relative flex items-center">
+            {!isSearchOpen ? (
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="relative p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white cursor-pointer"
+              >
+                <Search size={20} className="sm:size-5.5" />
+              </button>
+            ) : (
+              <div className="static flex items-center bg-slate-800 border border-slate-600 rounded-full px-3 sm:px-4 py-2 w-full sm:w-80 shadow-lg">
+                <Search
+                  size={18}
+                  className="text-gray-400 mr-3 shrink-0"
+                />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={onInputChange}
+                  className="flex-1 bg-transparent text-white placeholder-gray-500 outline-none text-sm sm:text-base"
+                  autoFocus
+                />
+              </div>
+            )}
+          </div>
+        )}
 
-        {/* Notification */}
-        <button
-          className="p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white"
-          aria-label="Notifications"
-        >
+        {/* Notification - hidden on mobile */}
+        <button className="hidden sm:block p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white cursor-pointer">
           <Bell size={22} />
         </button>
 
-        {/* Sign In */}
-        <button
-          className="p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white flex items-center gap-2"
-          aria-label="Sign In"
-        >
+        {/* Sign In - hidden on mobile */}
+        <button className="hidden sm:flex p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
           <User size={22} />
-          <span className="hidden sm:inline text-sm font-medium">Sign In</span>
+          <span className="hidden md:inline text-sm font-medium">Sign In</span>
+        </button>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="lg:hidden p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white cursor-pointer"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <nav className="fixed top-0 right-0 h-screen w-[70%] max-w-sm bg-slate-900/95 backdrop-blur-md border-l border-slate-700 p-4 space-y-3 lg:hidden z-40">
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white cursor-pointer"
+          >
+            <X size={24} />
+          </button>
+          <div className="mt-10 space-y-3">
+            <Link
+              href="/"
+              className="block py-2 hover:text-red-400 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/"
+              className="block py-2 hover:text-red-400 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Movies
+            </Link>
+            <Link
+              href="/"
+              className="block py-2 hover:text-red-400 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Series
+            </Link>
+            <Link
+              href="/"
+              className="block py-2 hover:text-red-400 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Kids
+            </Link>
+          </div>
+          <div className="pt-2 border-t border-slate-700 flex gap-2">
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+              <Bell size={18} />
+              <span className="text-sm">Notifications</span>
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+              <User size={18} />
+              <span className="text-sm">Sign In</span>
+            </button>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
