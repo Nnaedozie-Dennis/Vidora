@@ -1,7 +1,8 @@
-export const TMDB_ACCESS_TOKEN =
-  process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN || "";
+export const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN || "";
 
 export const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+
+export const API_BASE_URL = "/api";
 
 export interface Movie {
   id: number;
@@ -33,17 +34,10 @@ export async function fetchMovies(
   endpoint: string,
   params: Record<string, string> = {},
 ): Promise<Movie[]> {
-  const url = new URL(`${TMDB_BASE_URL}/${endpoint}`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value),
-  );
+  const queryParams = new URLSearchParams(params);
+  const url = `${API_BASE_URL}/movies?endpoint=${endpoint}&${queryParams.toString()}`;
 
-  const res = await fetch(url.toString(), {
-    headers: {
-      accept: "application/json",
-      Authorization: TMDB_ACCESS_TOKEN,
-    },
-  });
+  const res = await fetch(url);
   if (!res.ok) throw new Error("API fetch failed");
   const data = await res.json();
   return data.results || [];
@@ -73,7 +67,6 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(() => func(...args), wait);
   };
 }
-
 
 export async function fetchModernRecommendations(
   movie: Movie,
