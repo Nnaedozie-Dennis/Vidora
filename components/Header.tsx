@@ -1,13 +1,15 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { debounce } from "../lib/utils";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Search, Bell, User, Menu, X } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   const pathname = usePathname();
+  const { user, isLoaded } = useUser();
 
   // Hide header completely on movie detail pages (/movie/[id])
   if (pathname.startsWith("/movie/")) {
@@ -132,10 +134,7 @@ export default function Header() {
               </button>
             ) : (
               <div className="static flex items-center bg-slate-800 border border-slate-600 rounded-full px-3 sm:px-4 py-2 w-full sm:w-80 shadow-lg">
-                <Search
-                  size={18}
-                  className="text-gray-400 mr-3 shrink-0"
-                />
+                <Search size={18} className="text-gray-400 mr-3 shrink-0" />
                 <input
                   type="text"
                   placeholder="Search..."
@@ -154,11 +153,19 @@ export default function Header() {
           <Bell size={22} />
         </button>
 
-        {/* Sign In - hidden on mobile */}
-        <button className="hidden sm:flex p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
-          <User size={22} />
-          <span className="hidden md:inline text-sm font-medium">Sign In</span>
-        </button>
+        {/* User Auth Button - hidden on mobile */}
+        {isLoaded && !user ? (
+          <button className="hidden sm:flex p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
+            <User size={22} />
+            <a href="https://flowing-cougar-99.accounts.dev/sign-up" className="hover:text-red-400">
+              Sign Up
+            </a>
+          </button>
+        ) : isLoaded && user ? (
+          <div className="hidden sm:flex gap-4">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        ) : null}
 
         {/* Mobile Menu Toggle */}
         <button
@@ -213,10 +220,23 @@ export default function Header() {
               <Bell size={18} />
               <span className="text-sm">Notifications</span>
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
-              <User size={18} />
-              <span className="text-sm">Sign In</span>
-            </button>
+            {isLoaded && !user ? (
+              <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+                <User size={18} />
+                <a
+                  href="https://flowing-cougar-99.accounts.dev/sign-up"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-sm"
+                >
+                  Sign Up
+                </a>
+              </button>
+            ) : isLoaded && user ? (
+              <div className="flex-1 flex items-center justify-center">
+                <UserButton afterSignOutUrl="/" />
+                <span className="ml-2 text-sm">User</span>
+              </div>
+            ) : null}
           </div>
         </nav>
       )}
