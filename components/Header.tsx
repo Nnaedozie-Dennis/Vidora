@@ -6,6 +6,12 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Search, Bell, User, Menu, X } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+} from "@clerk/nextjs";
 
 export default function Header() {
   const pathname = usePathname();
@@ -154,13 +160,34 @@ export default function Header() {
         </button>
 
         {/* User Auth Button - hidden on mobile */}
-        {isLoaded && !user ? (
+        {/* {isLoaded && !user ? (
           <button className="hidden sm:flex p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
-            <User size={22} />
-            <a href="https://flowing-cougar-99.accounts.dev/sign-up" className="hover:text-red-400">
-              Sign Up
-            </a>
+            <User size={22} /> 
+            <Link href="/sign-up" className="hover:text-red-400"> Sign Up </Link>
           </button>
+        ) : isLoaded && user ? (
+          <div className="hidden sm:flex gap-4">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        ) : null}  */}
+
+        {isLoaded && !user ? (
+          <SignedOut>
+            <div className="hidden sm:flex items-center gap-2">
+              {/* <SignInButton mode="modal">
+                <button className="p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
+                  <User size={22} />
+                </button>
+              </SignInButton> */}
+
+              <SignUpButton mode="modal">
+                <button className="hidden sm:flex p-2 rounded-full hover:bg-slate-800/50 transition-colors text-gray-300 hover:text-white items-center gap-2 cursor-pointer">
+                  <User size={22} />
+                  <span className="hover:text-red-400">Sign Up</span>
+                </button>
+              </SignUpButton>
+            </div>
+          </SignedOut>
         ) : isLoaded && user ? (
           <div className="hidden sm:flex gap-4">
             <UserButton afterSignOutUrl="/" />
@@ -215,22 +242,33 @@ export default function Header() {
               Kids
             </Link>
           </div>
-          <div className="pt-2 border-t border-slate-700 flex gap-2">
-            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+          <div className="pt-2 border-t border-slate-700 flex gap-2 ">
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors ">
               <Bell size={18} />
               <span className="text-sm">Notifications</span>
             </button>
             {isLoaded && !user ? (
-              <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
-                <User size={18} />
-                <a
-                  href="https://flowing-cougar-99.accounts.dev/sign-up"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-sm"
-                >
-                  Sign Up
-                </a>
-              </button>
+              // <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+              //   <User size={18} />
+              //   <a
+              //     href="https://flowing-cougar-99.accounts.dev/sign-up"
+              //     onClick={() => setIsMobileMenuOpen(false)}
+              //     className="text-sm"
+              //   >
+              //     Sign Up
+              //   </a>
+              // </button>
+
+              <SignedOut>
+                <div className="flex items-center">
+                  <SignUpButton mode="modal">
+                    <button className="flex-1 flex items-center justify-center gap-2 py-2 text-gray-300 hover:text-white transition-colors">
+                      <User size={18} />
+                      <span className="text-sm">Sign Up</span>
+                    </button>
+                  </SignUpButton>
+                </div>
+              </SignedOut>
             ) : isLoaded && user ? (
               <div className="flex-1 flex items-center justify-center">
                 <UserButton afterSignOutUrl="/" />
