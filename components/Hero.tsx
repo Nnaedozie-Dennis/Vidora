@@ -23,7 +23,7 @@ export default function Hero({ onSearch }: HeroProps) {
       router.push("/");
       onSearch("");
     }
-  }, 10000); 
+  }, 8000); 
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;

@@ -1,12 +1,9 @@
-
-
-
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Suspense } from "react";
-import { ClerkProvider } from "@clerk/nextjs"; // ← Add this import
+import { ClerkProvider } from "@clerk/nextjs"; 
 
 export const metadata: Metadata = {
   title: "Vidora",
@@ -21,7 +18,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       {" "}
-      {/* ← Wrap everything inside ClerkProvider */}
       <html lang="en">
         <body className="bg-slate-950 text-gray-200 overflow-x-hidden font-sans">
           <Suspense fallback={null}>

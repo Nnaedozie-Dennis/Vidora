@@ -17,7 +17,7 @@ export default function CategoryButtons() {
   };
 
   return (
-    <section className="py-3 sm:py-4 px-2 sm:px-3 overflow-x-auto scrollbar-hide sticky top-16 z-40 bg-slate-950">
+    <section className="py-3 sm:py-4 px-2 sm:px-3 overflow-x-auto scrollbar-hide sticky top-16 z-40 bg-slate-950 sm:-ml-1.75">
       <div className="flex space-x-2">
         {Object.keys(GENRE_MAP).map((genre) => (
           <button
